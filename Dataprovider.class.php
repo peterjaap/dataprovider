@@ -39,7 +39,7 @@ class Dataprovider {
                 if(!empty($data->address)) {
                     $split = $this->splitAddress($data->address);
                     if($split!==false) {
-                        if($housenumber!=$split[1]) {
+                        if(strtolower($housenumber)!=strtolower($split[1])) {
                             unset($result->data[$key]);
                         } else {
                             print_r($data);
