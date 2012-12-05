@@ -1,7 +1,7 @@
 <?php
 require_once 'Dataprovider.class.php';
 
-$d = new Dataprovider('95107811d57655a0590510235aeb54e7');
+$d = new Dataprovider('YOUR KEY HERE');
 
 /*
 print_r($d->hostname('www.elgentos.nl'));
