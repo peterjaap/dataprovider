@@ -22,6 +22,15 @@ class Dataprovider {
         return $this->request($url);
     }
     
+    public function zipcode($zipcode) {
+        $args = get_defined_vars();
+        $url = $this->url . __FUNCTION__ . '.json?api_key=' . $this->api_key;
+        foreach($args as $key=>$value) {
+            $url .= '&'.$key.'='.$value;
+        }
+        return $this->request($url);
+    }
+    
     public function phone($number,$country='nl',$all=true) {
         $args = get_defined_vars();
         $url = $this->url . __FUNCTION__ . '.json?api_key=' . $this->api_key;
