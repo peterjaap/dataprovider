@@ -22,13 +22,36 @@ class Dataprovider {
         return $this->request($url);
     }
     
-    public function zipcode($zipcode,$housenumber) {
+    public function zipcode($zipcode,$housenumber=null,$country='NL') {
+        $country = strtoupper($country);
+        if($country=='NL' && strlen($zipcode)==6) $zipcode = substr($zipcode,0,4) . ' ' . substr($zipcode,4);
         $args = get_defined_vars();
+        unset($args['housenumber']);
         $url = $this->url . __FUNCTION__ . '.json?api_key=' . $this->api_key;
         foreach($args as $key=>$value) {
-            $url .= '&'.$key.'='.$value;
+            $url .= '&'.$key.'='.urlencode($value);
         }
-        return $this->request($url);
+        $result = $this->request($url);
+        if($housenumber==null) {
+            return $result;
+        } else {
+            foreach($result->data as $key=>$data) {
+                if(!empty($data->address)) {
+                    $split = $this->splitAddress($data->address);
+                    if($split!==false) {
+                        if($housenumber!=$split[1]) {
+                            unset($result->data[$key]);
+                        } else {
+                            print_r($data);
+                        }
+                    }
+                } else {
+                    unset($result->data[$key]);
+                }
+            }
+            return $result->data;
+        }
+        return false;
     }
     
     public function phone($number,$country='nl',$all=true) {
@@ -83,5 +106,18 @@ class Dataprovider {
         return false;
         curl_close($ch);
     }
+    
+    private function splitAddress($address) {
+        if (preg_match('~(.*?)\s*(\d[\-\d]*\D*)$~', $address, $number)) {
+            unset($number[0]);
+            $number[0] = $number[1];
+            $number[1] = $number[2];
+            unset($number[2]);
+            return $number;
+        } else {
+            return false;
+        }
+    }
+    
     
 }
