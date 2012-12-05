@@ -5,14 +5,14 @@ class Dataprovider {
     /* Version 0.1, based on Dataprovider API version 0.1 */
     /* Author: Peter Jaap Blaakmeer <peterjaap@elgentos.nl> */
 
-    public function __construct($email=null,$password=null) {
+    public function __construct($api_key) {
         $this->version = '0.1';
         $this->secure = true;
         $this->url = 'http' . ($this->secure ? 's' : null) . '://www.dataprovider.com/api/' . $this->version . '/lookup/';
-        $this->api_key = '<REQUEST YOUR API KEY AT WWW.DATAPROVIDER.COM>';
+        $this->api_key = $api_key;
     }
 
-    /* These four functions are code-wise the same, the only thing that differs is the function name itself and the parameters they take */
+    /* These functions are code-wise the same, the only thing that differs is the function name itself and the parameters they take */
     public function hostname($name) {
         $args = get_defined_vars();
         $url = $this->url . __FUNCTION__ . '.json?api_key=' . $this->api_key;
@@ -22,7 +22,7 @@ class Dataprovider {
         return $this->request($url);
     }
     
-    public function zipcode($zipcode) {
+    public function zipcode($zipcode,$housenumber) {
         $args = get_defined_vars();
         $url = $this->url . __FUNCTION__ . '.json?api_key=' . $this->api_key;
         foreach($args as $key=>$value) {
